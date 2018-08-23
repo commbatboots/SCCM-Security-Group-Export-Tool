@@ -50,6 +50,6 @@ Write-Host "Exporting Reboot Suppress"
 $RebootSuppress_Export > "$Export\Reboot Suppress Workstations.txt"
 
 Write-Host "Exporting Wave 1" 
-$Wav1_Export > "$Export\Wave 1 Workstations.txt"
+$Wave1_Export > "$Export\Wave 1 Workstations.txt"
 
 Write-Host "Export complete" -ForegroundColor Yellow
