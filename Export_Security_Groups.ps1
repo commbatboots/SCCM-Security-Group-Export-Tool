@@ -2,15 +2,15 @@ Param (
     [Parameter(Mandatory=$true)][String]$Export
 )
 
-$SCCMGroups = @()
-$Groups = Get-ADGroup -filter 'Name -like "sg-sccm-*"'
-$Groups = $Groups.Name
+$SCCMGroups     = @()
+$Groups         = Get-ADGroup -filter 'Name -like "sg-sccm-*"'
+$Groups         = $Groups.Name
 $Exluded        = $Groups | where {$_ -like "*Excluded*"}
 $Pilot          = $Groups | where {$_ -like "*Pilot*"}
 $Production     = $Groups | where {$_ -like "*Production*"}
 $RebootSuppress = $Groups | where {$_ -like "*Reboot Suppress*"}
 $Wave1          = $Groups | where {$_ -like "*Wave 1*"}
-$WQL = "SMS_R_System.SystemGroupName ="
+$WQL            = "SMS_R_System.SystemGroupName ="
 
 $Excluded_Export       = @()
 $Pilot_Export          = @()
