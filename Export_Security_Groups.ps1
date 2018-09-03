@@ -40,16 +40,16 @@ Write-Host "Exporting data to $Export" -ForegroundColor Yellow
 Write-host "Exporting Excluded.." 
 $Excluded_Export > "$Export\Excluded Workstations.txt"
 
-Write-Host "Exporting Pilot" 
+Write-Host "Exporting Pilot.." 
 $Pilot_Export > "$Export\Pilot Workstations.txt"
 
-Write-Host "Exporting Production" 
+Write-Host "Exporting Production.." 
 $Production_Export > "$Export\Production Workstations.txt"
 
-Write-Host "Exporting Reboot Suppress" 
+Write-Host "Exporting Reboot Suppress.." 
 $RebootSuppress_Export > "$Export\Reboot Suppress Workstations.txt"
 
-Write-Host "Exporting Wave 1" 
+Write-Host "Exporting Wave 1.." 
 $Wave1_Export > "$Export\Wave 1 Workstations.txt"
 
 Write-Host "Export complete" -ForegroundColor Yellow
