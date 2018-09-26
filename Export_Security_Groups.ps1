@@ -2,7 +2,6 @@ Param (
     [Parameter(Mandatory=$true)][String]$Export
 )
 
-$SCCMGroups     = @()
 $Groups         = Get-ADGroup -filter 'Name -like "sg-sccm-*"'
 $Groups         = $Groups.Name
 $Exluded        = $Groups | where {$_ -like "*Excluded*"}
@@ -12,44 +11,56 @@ $RebootSuppress = $Groups | where {$_ -like "*Reboot Suppress*"}
 $Wave1          = $Groups | where {$_ -like "*Wave 1*"}
 $WQL            = "SMS_R_System.SystemGroupName ="
 
+#Arrays for WQL queiries
+$Groups = 'Excluded','Pilot', 'Production', 'Reboot Suppress', 'Wave1'
 $Excluded_Export       = @()
 $Pilot_Export          = @()
 $Production_Export     = @()
 $RebootSuppress_Export = @()
 $Wave1_Export          = @()
+$Complete_Table        = [ordered]@{} 
 
+#BEGIN
 
-foreach ($group in $Exluded) {
-    $Excluded_Export += "and" + " " + '"' + $WQL + " " + $group + '"'
+BEGIN {
+
+    Write-Host "Compiling table.."
+
+    foreach ($group in $Groups) {
+        $Complete_Table.Add($group,@())
+    }
+    
+    foreach ($group in $Exluded) {
+        $Complete_Table["Excluded"] += $group
+        $Excluded_Export += "and" + " " + '"' + $WQL + " " + $group + '"'
+    
+    }
+    foreach ($group in $Pilot) {
+        $Complete_Table["Pilot"] += $group
+        $Pilot_Export += "and" + " " + '"' + $WQL + " " + $group + '"'
+    
+    }
+    foreach ($group in $Production) {
+        $Complete_Table["Production"] += $group
+        $Production_Export += "and" + " " + '"' + $WQL + " " + $group + '"'
+    
+    }
+    foreach ($group in $RebootSuppress) {
+        $Complete_Table["Reboot Suppress"] += $group
+        $RebootSuppress_Export += "and" + " " + '"' + $WQL + " " + $group + '"'
+    
+    }
+    foreach ($group in $Wave1) {
+        $Complete_Table["Wave1"] += $group
+        $Wave1_Export += "and" + " " + '"' + $WQL + " " + $group + '"'
+    
+    }    
 }
-foreach ($group in $Pilot) {
-    $Pilot_Export += "and" + " " + '"' + $WQL + " " + $group + '"'
-}
-foreach ($group in $Production) {
-    $Production_Export += "and" + " " + '"' + $WQL + " " + $group + '"'
-}
-foreach ($group in $RebootSuppress) {
-    $RebootSuppress_Export += "and" + " " + '"' + $WQL + " " + $group + '"'
-}
-foreach ($group in $Wave1) {
-    $Wave1_Export += "and" + " " + '"' + $WQL + " " + $group + '"'
+
+PROCESS {
+
 }
 
-Write-Host "Exporting data to $Export" -ForegroundColor Yellow
-
-Write-host "Exporting Excluded.." 
-$Excluded_Export > "$Export\Excluded Workstations.txt"
-
-Write-Host "Exporting Pilot.." 
-$Pilot_Export > "$Export\Pilot Workstations.txt"
-
-Write-Host "Exporting Production.." 
-$Production_Export > "$Export\Production Workstations.txt"
-
-Write-Host "Exporting Reboot Suppress.." 
-$RebootSuppress_Export > "$Export\Reboot Suppress Workstations.txt"
-
-Write-Host "Exporting Wave 1.." 
-$Wave1_Export > "$Export\Wave 1 Workstations.txt"
-
-Write-Host "Export complete" -ForegroundColor Yellow
+END {
+    
+}
